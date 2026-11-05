@@ -1,18 +1,2 @@
-<!DOCTYPE html>
-<html lang="en"><head><meta charset="utf-8">
-<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
-<meta name="robots" content="noindex,nofollow">
-<title>CLVR CRM</title>
-<meta name="theme-color" content="#0a0b12">
-<link rel="manifest" href="manifest.webmanifest"><link rel="apple-touch-icon" href="icons/icon-180.png"><link rel="icon" href="icons/icon-192.png">
-<style>html,body{margin:0;height:100%;background:#0a0b12;color:#a3a7ba;font:14px Inter,system-ui,sans-serif;display:grid;place-items:center}</style>
-</head><body><div id="boot">Loading CLVR…</div>
-<script>
-/* CLVR CRM runs the same app code as the team app, so both always stay in sync.
-   This page pulls the latest app, points its code files at the app host, and shows it under the CLVR name. */
-(async()=>{const APP='https://nomadishere.github.io/lucky-line-crm/';
- try{let h=await (await fetch(APP+'index.html',{cache:'no-store'})).text();
-  h=h.replace(/(src|href)="(?!https?:|#|data:|blob:|mailto:|tel:|\$\{|manifest\.webmanifest|icons\/)([^"]+)"/g,(m,a,u)=>`${a}="${APP}${u}"`);
-  document.open();document.write(h);document.close();
- }catch(e){document.getElementById('boot').textContent='CLVR could not load. Check your connection and refresh.'}})();
-</script></body></html>
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="robots" content="noindex"><title>CLVR CRM</title>
+<script>location.replace('/login/'+location.hash)</script><meta http-equiv="refresh" content="0;url=/login/"></head><body><a href="/login/">Open CLVR CRM</a></body></html>
