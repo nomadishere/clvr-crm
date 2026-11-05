@@ -113,3 +113,33 @@
     }
   });
 })();
+
+// ===== 5-benefit reel =====
+(() => {
+  const reel = document.getElementById('reel'); if (!reel) return;
+  const slides = [...reel.querySelectorAll('.slide')], segs = [...reel.querySelectorAll('.segs button')];
+  const n = document.getElementById('reelN'), pp = document.getElementById('reelPP');
+  let cur = 0, userPaused = false, hover = false;
+  const go = i => {
+    i = (i + slides.length) % slides.length; if (i === cur && segs[i].classList.contains('run')) return;
+    slides[cur].classList.remove('on'); slides[cur].classList.add('out');
+    const prev = slides[cur]; setTimeout(() => prev.classList.remove('out'), 650);
+    cur = i; slides[cur].classList.add('on'); n.textContent = cur + 1;
+    segs.forEach((b, k) => { b.classList.toggle('done', k < cur); b.classList.remove('run'); b.removeAttribute('aria-current'); });
+    void segs[cur].offsetWidth; segs[cur].classList.add('run'); segs[cur].setAttribute('aria-current', 'true');
+  };
+  segs.forEach((b, k) => {
+    b.querySelector('i').addEventListener('animationend', () => go(cur + 1));
+    b.addEventListener('click', () => go(k));
+  });
+  const sync = () => reel.classList.toggle('paused', userPaused || hover);
+  pp.addEventListener('click', () => { userPaused = !userPaused; pp.setAttribute('aria-label', userPaused ? 'Play' : 'Pause'); sync(); });
+  if (matchMedia('(hover:hover)').matches) {
+    reel.addEventListener('mouseenter', () => { hover = true; sync(); });
+    reel.addEventListener('mouseleave', () => { hover = false; sync(); });
+  }
+  // pause when the hero is off screen or the tab is hidden
+  let vis = true;
+  new IntersectionObserver(([e]) => { vis = e.isIntersecting; reel.classList.toggle('offscreen', !vis); }).observe(reel);
+  document.addEventListener('visibilitychange', () => reel.classList.toggle('offscreen', document.hidden));
+})();
