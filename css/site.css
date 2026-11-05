@@ -371,3 +371,11 @@ figcaption{margin-top:16px;font-size:14px;color:var(--muted);font-weight:500}
   .slide strong{font-size:15px}.slide span{font-size:13px}
 }
 .reel.offscreen .segs .run i::after{animation-play-state:paused}
+
+.slide .byr{display:inline-flex;align-items:center;gap:5px;white-space:nowrap;min-height:26px;margin-top:2px;font-size:12px;color:var(--muted);text-decoration:none}
+.slide .byr svg{width:14px;height:14px;color:var(--leaf-hi)}
+.slide .byr b{color:var(--ink);font-weight:600}
+.slide .byr:hover{color:var(--ink)}
+.slide.on .byr{pointer-events:auto}
+.slide .byr em{font-style:normal}
+@media (max-width:400px){.slide .byr em:first-child{display:none}}
