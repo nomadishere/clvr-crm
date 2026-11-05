@@ -24,7 +24,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Sora:wght@500;600;700&display=swap">
-<link rel="stylesheet" href="css/site.css?v=3">
+<link rel="stylesheet" href="css/site.css?v=4">
 <script type="importmap">{"imports":{"three":"./vendor/three/three.module.min.js","three/addons/":"./vendor/three/addons/"}}</script>
 </head>
 <body>
@@ -45,7 +45,6 @@
 <main id="top">
 <!-- HERO: logo top-left → headline → CTA (the golden triangle), the living clover + clock ring on the right -->
 <section class="hero" aria-labelledby="h1">
-  <canvas id="gl" aria-hidden="true"></canvas>
   <div class="aura" aria-hidden="true"></div>
   <div class="wrap">
     <div class="txt">
@@ -59,26 +58,46 @@
       </div>
       <div class="micro rv d3"><span>Works on any phone</span><span>Your data stays yours</span><span>Built by roofers in Montana</span></div>
     </div>
-    <div class="stage" aria-hidden="true">
-      <img class="fallback" src="img/clvr.svg" alt="">
-    </div>
-    <!-- 5-BENEFIT REEL: auto-plays under the clover, tap a bar to jump, pauses on hover/focus -->
-    <div class="reel" id="reel" role="region" aria-roledescription="carousel" aria-label="Top 5 reasons roofers switch to CLVR">
-      <div class="reel-top"><span class="reel-k"><span id="reelN">1</span> of 5 &middot; why roofers switch</span>
-        <button class="reel-pp" id="reelPP" type="button" aria-label="Pause"><svg viewBox="0 0 24 24" aria-hidden="true"><path class="ps" d="M8 5v14M16 5v14"/><path class="pl" d="M7 5l12 7-12 7z"/></svg></button></div>
-      <div class="reel-view" aria-live="off">
-        <div class="slide on"><b class="big">$0</b><div><strong>Better roof report. No wait. No fees.</strong><a class="byr" href="https://useroofly.com" target="_blank" rel="noopener" data-cta="reel-roofly"><em>Powered by</em><svg viewBox="0 0 100 100" aria-hidden="true"><path d="M14 54 L50 22 L86 54" fill="none" stroke="currentColor" stroke-width="11"/><rect x="30" y="68" width="40" height="11" fill="currentColor"/></svg><b>Roofly</b><em>&middot; useroofly.com</em></a></div></div>
-        <div class="slide"><b class="big" id="heroClock">59:59</b><div><strong>Priced proposal in 60 minutes</strong><span>A clock on every job, so you beat the next roofer there.</span></div></div>
-        <div class="slide"><b class="big">1&nbsp;video</b><div><strong>Your walk-around becomes the report</strong><span>Film and talk through the roof. AI builds the priced options.</span></div></div>
-        <div class="slide"><b class="big"><img src="img/mark.svg" alt="" width="40" height="40"></b><div><strong>Clover, your AI sales coach</strong><span>Coaching, training and contests from a real closer's playbook.</span></div></div>
-        <div class="slide"><b class="big">1&nbsp;app</b><div><strong>Lead to signed to paid</strong><span>Follow-ups, e-sign and payments in one place. Your data stays yours.</span></div></div>
+    <!-- FILM: 5 real app screens fly in, camera pushes in, words animate over the scene -->
+    <div class="film" id="film" role="region" aria-roledescription="carousel" aria-label="Top 5 reasons roofers switch to CLVR">
+      <div class="f-stage">
+        <div class="f-glow" aria-hidden="true"></div>
+        <div class="f-scene on" data-i="0">
+          <div class="f-phone"><div class="scr"><img src="shots/roofly-measure.webp" alt="Roofly roof report with traced edges, squares and pitch" style="--ox:50%;--oy:30%"><i class="tap" style="left:50%;top:30%"></i></div></div>
+          <div class="f-chip" style="--x:58%;--y:72%"><b>29.2 sq</b> 7/12 pitch</div>
+          <div class="f-words"><span class="f-k">01 &middot; Roof report</span><p class="f-h">Better roof report. <em>No wait. No fees.</em></p>
+            <a class="byr" href="https://useroofly.com" target="_blank" rel="noopener" data-cta="film-roofly"><span class="pw">Powered by</span><svg viewBox="0 0 100 100" aria-hidden="true"><path d="M14 54 L50 22 L86 54" fill="none" stroke="currentColor" stroke-width="11"/><rect x="30" y="68" width="40" height="11" fill="currentColor"/></svg><b>Roofly</b><span>&middot; useroofly.com</span></a></div>
+        </div>
+        <div class="f-scene" data-i="1">
+          <div class="f-phone"><div class="scr"><img src="shots/job-proposal.webp" alt="CLVR job with the 60-minute proposal clock and Send to client" loading="lazy" style="--ox:50%;--oy:55%"><i class="tap" style="left:50%;top:72%"></i></div></div>
+          <div class="f-chip red" style="--x:52%;--y:36%"><span class="dot"></span>Proposal due <b id="heroClock">59:59</b></div>
+          <div class="f-words"><span class="f-k">02 &middot; Proposal clock</span><p class="f-h">Proposal out <em>in 60 minutes.</em></p><span class="f-s">Before the next roofer even shows up.</span></div>
+        </div>
+        <div class="f-scene" data-i="2">
+          <div class="f-phone"><div class="scr"><img src="shots/proposal-page.webp" alt="Customer proposal with Good and Better priced options" loading="lazy" style="--ox:50%;--oy:62%"><i class="tap" style="left:50%;top:62%"></i></div></div>
+          <div class="f-chip" style="--x:54%;--y:46%"><b>Good &middot; Better &middot; Best</b></div>
+          <div class="f-words"><span class="f-k">03 &middot; Walk-around</span><p class="f-h">Film the roof. <em>Get priced options.</em></p><span class="f-s">AI turns your video into the report.</span></div>
+        </div>
+        <div class="f-scene" data-i="3">
+          <div class="f-phone"><div class="scr"><img src="shots/clover-chat.webp" alt="Clover AI coach answering how to close more deals" loading="lazy" style="--ox:50%;--oy:40%"><i class="tap" style="left:76%;top:37%"></i></div></div>
+          <div class="f-chip" style="--x:50%;--y:24%"><img src="img/mark.svg" alt="" width="18" height="18">&ldquo;How do I close more?&rdquo;</div>
+          <div class="f-words"><span class="f-k">04 &middot; AI sales coach</span><p class="f-h">Clover coaches <em>every rep.</em></p><span class="f-s">Training and contests built in.</span></div>
+        </div>
+        <div class="f-scene" data-i="4">
+          <div class="f-phone"><div class="scr"><img src="shots/proposal-sign.webp" alt="Homeowner signing and accepting the proposal" loading="lazy" style="--ox:50%;--oy:80%"><i class="tap" style="left:50%;top:95%"></i></div></div>
+          <div class="f-chip ok" style="--x:52%;--y:62%"><span class="dot"></span>Signed <b>$18,610</b></div>
+          <div class="f-words"><span class="f-k">05 &middot; Signed &amp; paid</span><p class="f-h">Signed on the spot. <em>Paid in one app.</em></p><span class="f-s">Your data stays yours.</span></div>
+        </div>
       </div>
-      <div class="segs">
-        <button type="button" class="run" aria-label="1: Better roof report, no wait, no fees" aria-current="true"><i></i></button>
-        <button type="button" aria-label="2: 60-minute proposals"><i></i></button>
-        <button type="button" aria-label="3: Video walk-around report"><i></i></button>
-        <button type="button" aria-label="4: AI sales coach"><i></i></button>
-        <button type="button" aria-label="5: One app, lead to paid"><i></i></button>
+      <div class="f-bar">
+        <div class="segs">
+          <button type="button" class="run" aria-label="1: Better roof report, no wait, no fees" aria-current="true"><i></i></button>
+          <button type="button" aria-label="2: Proposal out in 60 minutes"><i></i></button>
+          <button type="button" aria-label="3: Film the roof, get priced options"><i></i></button>
+          <button type="button" aria-label="4: Clover AI sales coach"><i></i></button>
+          <button type="button" aria-label="5: Signed and paid in one app"><i></i></button>
+        </div>
+        <button class="reel-pp" id="reelPP" type="button" aria-label="Pause"><svg viewBox="0 0 24 24" aria-hidden="true"><path class="ps" d="M8 5v14M16 5v14"/><path class="pl" d="M7 5l12 7-12 7z"/></svg></button>
       </div>
     </div>
   </div>
@@ -385,7 +404,6 @@
 <div class="mbar" id="mbar"><a class="btn g" href="/login/">Log in</a><a class="btn p" href="#start" data-cta="sticky">Get early access</a></div>
 <div class="toast" id="toast" role="status"></div>
 
-<script src="js/site.js?v=2" defer></script>
-<script type="module" src="js/hero.js?v=1"></script>
+<script src="js/site.js?v=3" defer></script>
 </body>
 </html>
