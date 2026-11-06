@@ -95,21 +95,35 @@
   form.addEventListener('submit', async e => {
     e.preventDefault();
     const d = Object.fromEntries(new FormData(form));
+    const bad = (t, el) => { msg.className = 'fmsg err'; msg.textContent = t; if (el) $(el).focus(); };
     msg.className = 'fmsg';
-    if (!d.name.trim()) { msg.className = 'fmsg err'; msg.textContent = 'Please add your name.'; $('#fn').focus(); return; }
-    if (!/^\S+@\S+\.\S+$/.test(d.email.trim()) && d.phone.replace(/\D/g, '').length < 10) { msg.className = 'fmsg err'; msg.textContent = 'Add an email or a mobile number so we can reach you.'; $('#fe').focus(); return; }
-    const btn = form.querySelector('button'); btn.disabled = true; btn.textContent = 'Sending…';
+    if (d.website) return; // bot trap
+    if (!d.name.trim()) return bad('Please add your name.', '#fn');
+    if (!/^\S+@\S+\.\S+$/.test(d.email.trim())) return bad('Please add a real email address.', '#fe');
+    if ((d.password || '').length < 8) return bad('Password needs at least 8 characters.', '#fp');
+    const btn = form.querySelector('button'); btn.disabled = true; btn.textContent = 'Creating your account…';
+    const H = { apikey: KEY, 'Content-Type': 'application/json' };
     try {
-      const r = await fetch(SB + '/rest/v1/rpc/clvr_signup', { method: 'POST', headers: { apikey: KEY, Authorization: 'Bearer ' + KEY, 'Content-Type': 'application/json' },
-        body: JSON.stringify({ p: { ...d, source: 'clvrcrm.com', page: location.href, ua: navigator.userAgent } }) });
+      const r = await fetch(SB + '/rest/v1/rpc/clvr_signup', { method: 'POST', headers: H,
+        body: JSON.stringify({ p_name: d.name.trim(), p_email: d.email.trim(), p_password: d.password, p_company: d.company.trim() || null }) });
       const j = await r.json().catch(() => ({}));
-      if (!r.ok || j.ok === false) throw new Error(j.error || j.message || 'error');
-      form.querySelectorAll('input,select,textarea').forEach(x => x.disabled = true);
-      btn.textContent = "You're in ✓"; msg.className = 'fmsg ok'; msg.textContent = "Thanks! We'll reach out within one business day to set up your demo.";
-      track('signup', { crew: d.crew_size, crm: d.current_crm });
+      if (!r.ok) throw new Error(j.message || 'error');
+      // also log it as a lead for the team (best effort)
+      fetch(SB + '/rest/v1/rpc/clvr_signup', { method: 'POST', headers: { ...H, Authorization: 'Bearer ' + KEY },
+        body: JSON.stringify({ p: { name: d.name, company: d.company, email: d.email, source: 'clvrcrm.com free signup', page: location.href, ua: navigator.userAgent } }) }).catch(() => {});
+      track('signup', { kind: 'free_account' });
+      // sign in and hand the session to the app at /login (same site, same storage)
+      const t = await fetch(SB + '/auth/v1/token?grant_type=password', { method: 'POST', headers: H, body: JSON.stringify({ email: d.email.trim(), password: d.password }) }).then(x => x.json());
+      if (t.access_token) {
+        try { localStorage.setItem('jcrm_session', JSON.stringify({ access_token: t.access_token, refresh_token: t.refresh_token, expires_at: t.expires_at || Math.floor(Date.now() / 1000) + (t.expires_in || 3600), email: t.user && t.user.email })); } catch (_) {}
+      }
+      btn.textContent = "You're in ✓"; msg.className = 'fmsg ok'; msg.textContent = 'Account created! Opening CLVR…';
+      setTimeout(() => { location.href = '/login/'; }, 900);
     } catch (err) {
-      btn.disabled = false; btn.textContent = 'Get early access';
-      msg.className = 'fmsg err'; msg.textContent = "That didn't send. Check your connection and try again.";
+      btn.disabled = false; btn.textContent = 'Create my free account';
+      const m = String(err.message || '');
+      if (/already has an account/i.test(m)) { msg.className = 'fmsg err'; msg.innerHTML = 'That email already has an account. <a href="/login/">Log in here</a>.'; }
+      else bad(/[a-z]/i.test(m) && m !== 'error' ? m : "That didn't go through. Check your connection and try again.");
     }
   });
 })();

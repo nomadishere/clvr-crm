@@ -37,7 +37,7 @@
     </nav>
     <div class="acts">
       <a class="btn g sm" id="loginTop" href="/login/">Log in</a>
-      <a class="btn p sm" href="#start" data-cta="nav">Get early access</a>
+      <a class="btn p sm" href="#start" data-cta="nav">Start free</a>
     </div>
   </div>
 </header>
@@ -52,7 +52,7 @@
       <h1 id="h1" class="rv d1">Measure it. Price it. <span class="grad">Signed in 60&nbsp;minutes.</span></h1>
       <p class="lede rv d2">CLVR measures the roof from aerial imagery with no per-report fee, builds a priced proposal from your walk-around, and starts a 60-minute clock so it reaches the homeowner before the next roofer shows up.</p>
       <div class="ctas rv d3">
-        <a class="btn p" href="#start" data-cta="hero">Get early access
+        <a class="btn p" href="#start" data-cta="hero">Start free
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a>
         <a class="btn g" href="#measure" data-cta="hero-see">See it measure a roof</a>
       </div>
@@ -328,7 +328,7 @@
           <tr><td>AI sales coach</td><td class="me"><span class="y">✓</span> Clover, trained on your playbook</td><td>AI phone and voice add-ons</td><td><span class="n">—</span></td><td><span class="n">—</span></td></tr>
           <tr><td>Training library + contests</td><td class="me"><span class="y">✓</span> Built in</td><td><span class="n">—</span></td><td><span class="n">—</span></td><td><span class="n">—</span></td></tr>
           <tr><td>E-sign proposals</td><td class="me"><span class="y">✓</span></td><td><span class="y">✓</span></td><td><span class="y">✓</span></td><td><span class="y">✓</span></td></tr>
-          <tr><td>Published pricing</td><td class="me">Founding-crew pricing on the demo</td><td>No. Est. $225–550/mo + $20–75 per user</td><td>From $250/mo; higher plans by quote</td><td>Yes. Free plan, paid from $209/mo</td></tr>
+          <tr><td>Published pricing</td><td class="me">Free to start</td><td>No. Est. $225–550/mo + $20–75 per user</td><td>From $250/mo; higher plans by quote</td><td>Yes. Free plan, paid from $209/mo</td></tr>
           <tr><td>Your data</td><td class="me"><span class="y">✓</span> In your own database, export any time</td><td>Vendor-hosted</td><td>Vendor-hosted</td><td>Vendor-hosted</td></tr>
         </tbody>
       </table>
@@ -360,7 +360,7 @@
       <details class="rv"><summary>Can I bring my data from JobNimbus, AccuLynx or a spreadsheet?</summary><p>Yes. Send us your export or spreadsheet and we'll load your contacts, jobs and open leads during setup.</p></details>
       <details class="rv"><summary>Does it work on my phone?</summary><p>It was designed on a phone first. Open it in Safari or Chrome and add it to your home screen, and it runs like an app, in day or night mode.</p></details>
       <details class="rv"><summary>Who owns my data?</summary><p>You do. Your company's data lives in its own secure database with row-level security, and you can export it whenever you like.</p></details>
-      <details class="rv"><summary>What does it cost?</summary><p>We're onboarding a small group of founding roofing companies first, with founding-crew pricing and no per-report measurement fees. Book a demo and we'll walk you through it.</p></details>
+      <details class="rv"><summary>What does it cost?</summary><p>It's free to start: <a href="#start">create your account</a> and start playing with it today. There are no per-report measurement fees.</p></details>
       <details class="rv"><summary>I'm already on the team. Where do I log in?</summary><p>Tap <a href="/login/">Log in</a> at the top of this page, or go to <b>clvrcrm.com/login</b>. Save it to your home screen and it opens straight into the CRM.</p></details>
     </div>
   </div>
@@ -370,24 +370,21 @@
 <section class="final" id="start" aria-labelledby="h-start">
   <div class="wrap">
     <div class="head c">
-      <span class="eyebrow rv">Founding crews</span>
-      <h2 id="h-start" class="rv d1">Get the next proposal out in 60 minutes.</h2>
-      <p class="lede rv d2">Tell us about your crew. We'll show you CLVR on one of your own roofs.</p>
+      <span class="eyebrow rv">Free account</span>
+      <h2 id="h-start" class="rv d1">Start free. Play with it today.</h2>
+      <p class="lede rv d2">Create your account in 30 seconds. No card, no contract.</p>
     </div>
     <form class="card formcard rv" id="signup" novalidate>
       <div class="fgrid">
-        <div><label class="f" for="fn">Your name</label><input class="fin" id="fn" name="name" autocomplete="name" required></div>
-        <div><label class="f" for="fc">Company</label><input class="fin" id="fc" name="company" autocomplete="organization"></div>
-        <div><label class="f" for="fe">Email</label><input class="fin" id="fe" name="email" type="email" autocomplete="email" inputmode="email"></div>
-        <div><label class="f" for="fp">Mobile</label><input class="fin" id="fp" name="phone" type="tel" autocomplete="tel" inputmode="tel"></div>
-        <div><label class="f" for="fs">Crew size</label><select class="fin" id="fs" name="crew_size"><option value="">Choose</option><option>Just me</option><option>2–5</option><option>6–15</option><option>16–50</option><option>50+</option></select></div>
-        <div><label class="f" for="fr">What you use now</label><select class="fin" id="fr" name="current_crm"><option value="">Choose</option><option>JobNimbus</option><option>AccuLynx</option><option>Roofr</option><option>JobProgress / Leap</option><option>Spreadsheets / paper</option><option>Something else</option></select></div>
-        <div class="full"><label class="f" for="fx">Anything we should know? <span style="color:var(--dim);font-weight:400">(optional)</span></label><textarea class="fin" id="fx" name="notes" rows="3"></textarea></div>
+        <div><label class="f" for="fn">Your name</label><input class="fin" id="fn" name="name" autocomplete="name" required maxlength="80"></div>
+        <div><label class="f" for="fc">Company <span style="color:var(--dim);font-weight:400">(optional)</span></label><input class="fin" id="fc" name="company" autocomplete="organization" maxlength="80"></div>
+        <div><label class="f" for="fe">Email</label><input class="fin" id="fe" name="email" type="email" autocomplete="email" inputmode="email" required></div>
+        <div><label class="f" for="fp">Password <span style="color:var(--dim);font-weight:400">(8+ characters)</span></label><input class="fin" id="fp" name="password" type="password" autocomplete="new-password" minlength="8" required></div>
         <div class="hp" aria-hidden="true"><label for="fw">Website</label><input id="fw" name="website" tabindex="-1" autocomplete="off"></div>
       </div>
-      <button class="btn p" type="submit" data-cta="form">Get early access</button>
+      <button class="btn p" type="submit" data-cta="form">Create my free account</button>
       <p class="fmsg" id="fmsg" role="status" aria-live="polite"></p>
-      <p class="alt">Already on the team? <a href="/login/">Log in to CLVR</a></p>
+      <p class="alt">It's free. Our team approves new accounts, usually the same day. Already have one? <a href="/login/">Log in</a></p>
     </form>
   </div>
 </section>
@@ -401,9 +398,9 @@
   </div>
 </footer>
 
-<div class="mbar" id="mbar"><a class="btn g" href="/login/">Log in</a><a class="btn p" href="#start" data-cta="sticky">Get early access</a></div>
+<div class="mbar" id="mbar"><a class="btn g" href="/login/">Log in</a><a class="btn p" href="#start" data-cta="sticky">Start free</a></div>
 <div class="toast" id="toast" role="status"></div>
 
-<script src="js/site.js?v=3" defer></script>
+<script src="js/site.js?v=4" defer></script>
 </body>
 </html>
