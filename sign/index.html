@@ -121,7 +121,7 @@ function openShare(){closeShare();const co=V.role==='company';const m=document.c
  m.innerHTML=`<div class="sheet"><h2 id="shh">${co?'Now send this to your client':'Share this contract'}</h2>
  <p>${co?`You signed for Lucky Line. Send ${esc(clientFirst())} this link so they can review and sign on their phone.`:'Send this link to anyone who needs a copy.'}</p>
  <textarea class="linkbox" id="lk" rows="3" readonly>${esc(linkToShare())}</textarea>
- <div class="grid"><a class="btn p" href="sms:&body=${encodeURIComponent(msg)}">Text it</a><a class="btn p" href="mailto:?subject=${encodeURIComponent(subj)}&body=${encodeURIComponent(msg)}">Email it</a>
+ <div class="grid"><a class="btn p" href="sms:${/iPhone|iPad|iPod|Macintosh/.test(navigator.userAgent)?'&':'?'}body=${encodeURIComponent(msg)}">Text it</a><a class="btn p" href="mailto:?subject=${encodeURIComponent(subj)}&body=${encodeURIComponent(msg)}">Email it</a>
  ${hasShare?'<button class="btn" onclick="doShare()">Share…</button>':''}<button class="btn" onclick="doCopy()" ${hasShare?'':'style="grid-column:1/-1"'}>Copy link</button></div>
  <div class="copied" id="cpm" aria-live="polite"></div><button class="done" onclick="closeShare()">Done</button></div>`;
  m.addEventListener('click',e=>{if(e.target===m)closeShare()});document.body.appendChild(m);document.body.style.overflow='hidden'}
