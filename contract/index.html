@@ -24,8 +24,15 @@ ul.sc{padding-left:20px;margin:0 0 10px}ul.sc li{margin:0 0 5px}
 textarea.f2{width:100%;font:inherit;padding:11px 12px;border:1.5px solid var(--rule);border-radius:10px;resize:none;color:var(--ink);min-height:48px}
 .foot{color:var(--muted);font-size:12px;margin-top:14px;border-top:1px solid var(--rule);padding-top:8px;display:flex;justify-content:space-between;gap:8px;flex-wrap:wrap}
 .band .who{min-width:0;overflow-wrap:anywhere}@media(max-width:360px){.logo{width:72px;height:72px}}
+.modal{position:fixed;inset:0;z-index:50;background:rgba(10,30,20,.55);display:flex;align-items:flex-end;justify-content:center;padding:12px}
+@media(min-width:640px){.modal{align-items:center}}
+.sheet{background:#fff;border-radius:18px;max-width:460px;width:100%;padding:18px 16px 16px;max-height:90vh;overflow:auto;box-shadow:0 10px 40px rgba(0,0,0,.25)}
+.sheet h2{color:var(--green);margin:0 0 6px}.sheet .linkbox{width:100%;font:13px/1.4 "Liberation Sans",Arial,sans-serif;padding:10px;border:1.5px solid var(--rule);border-radius:10px;background:var(--cover);color:var(--ink);resize:none;margin-top:8px}
+.sheet .grid{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:12px}.sheet .grid .btn{flex:none;width:100%}
+.sheet .done{display:block;width:100%;margin-top:10px;background:none;border:0;color:var(--muted);font:bold 14px "Liberation Sans",Arial,sans-serif;padding:10px;cursor:pointer}
+.copied{color:var(--green);font-weight:bold;text-align:center;min-height:20px;margin-top:8px}
 .warn{background:#FDECEC;border:1.5px solid var(--high);color:var(--high);border-radius:12px;padding:12px;font-weight:bold}
-@media print{.wrap{padding-bottom:0}.sec:last-child{margin-bottom:0}.testbar{-webkit-print-color-adjust:exact;print-color-adjust:exact}}
+@media print{.modal{display:none!important}.wrap{padding-bottom:0}.sec:last-child{margin-bottom:0}.testbar{-webkit-print-color-adjust:exact;print-color-adjust:exact}}
 </style>
 </head>
 <body>
@@ -59,7 +66,7 @@ function contractBody(d){
  <div class="sec">${hdr('Addendum A')}<h2>Contract Terms &amp; Conditions</h2><ol class="terms">${d.addendum.map(c=>`<li><b>${esc(c[0])}:</b> ${esc(c[1])}</li>`).join('')}</ol></div>`}
 function render(){const v=V,d=v.data;
  document.getElementById('tb').innerHTML=v.is_test?`<div class="testbar">TEST COPY · not a real contract · ${esc(v.label||'')}</div>`:'';
- document.getElementById('cp').textContent=v.role==='company'?(v.client_link_token?'Copy client link':'Copy link'):'Copy link to share';
+ document.getElementById('cp').textContent=v.role==='company'?'Send to client':'Share';
  const foot=`<div class="foot"><span><i>Shelter you can count on, service you'll remember.</i></span><span>${esc(d.footer||'')}</span></div>`;
  let acc='';
  if(v.client&&v.company){
@@ -77,7 +84,7 @@ function render(){const v=V,d=v.data;
   acc=`<div class="sec">${hdr('Acceptance')}<h2>Signed for Lucky Line</h2><div class="sigs">${sigCard('For Lucky Line Roofing LLC',v.company)}</div>
   ${v.changed_since_signing?'<p class="warn">The contract changed after you signed. The client cannot sign this version.</p>':''}
   <p style="margin-top:12px">Waiting for the client to sign. Send them the client link:</p>
-  <div class="row no-print"><button class="btn p" onclick="copyLink()">Copy client link</button></div>${foot}</div>`;
+  <div class="row no-print"><button class="btn p" onclick="openShare()">Send to client</button></div>${foot}</div>`;
  }else{
   acc=`<div class="sec" id="acc">${hdr('Acceptance')}<h2>Accept and sign</h2><div class="sigs">${sigCard('For Lucky Line Roofing LLC',v.company)}</div>
   <p style="margin-top:12px">You're accepting <b>${esc(d.accept_label)}</b> for <b>${money(d.total)}</b>.</p>
@@ -103,11 +110,25 @@ async function sign(){const E=document.getElementById('err');E.textContent='';co
  if(nm.length<2){E.textContent='Please type your full name.';return}if(!inked){E.textContent='Please sign in the box.';return}
  if(g('ag')&&!g('ag').checked){E.textContent='Please check the box to accept.';return}
  const b=g('go');b.disabled=true;b.textContent='Saving…';
- try{await call('sign',{name:nm,title:g('ti').value.trim(),email:g('em')?g('em').value.trim():'',agree:g('ag')?g('ag').checked:false,signature:sigPng(),ua:navigator.userAgent});V=await call('view');render();scrollTo({top:document.body.scrollHeight,behavior:'smooth'})}
+ try{await call('sign',{name:nm,title:g('ti').value.trim(),email:g('em')?g('em').value.trim():'',agree:g('ag')?g('ag').checked:false,signature:sigPng(),ua:navigator.userAgent});const wasCo=V.role==='company';V=await call('view');render();scrollTo({top:document.body.scrollHeight,behavior:'smooth'});if(wasCo)openShare()}
  catch(e){E.textContent=e.message;b.disabled=false;b.textContent='Try again'}}
 function linkToShare(){const u=new URL(location.href);if(V&&V.role==='company'&&V.client_link_token)u.searchParams.set('t',V.client_link_token);return u.href}
-async function copyLink(){const b=document.getElementById('cp');if(V&&V.role==='company'&&!V.client_link_token){alertMsg('Sign for Lucky Line first. Then the client link is ready.');return}
- try{await navigator.clipboard.writeText(linkToShare());b.textContent='Copied!'}catch(e){prompt('Copy this link:',linkToShare())}setTimeout(()=>render(),1600)}
+function clientFirst(){const n=(V&&V.data&&V.data.client_default&&V.data.client_default[0])||'';return n.split(' ')[0]||'there'}
+function shareMsg(){return `Hi ${clientFirst()}, here's your roof contract from Lucky Line Roofing for ${V.data.address}. You can review it and sign right on your phone: ${linkToShare()}`}
+function copyLink(){if(V&&V.role==='company'&&!V.client_link_token){alertMsg('Sign for Lucky Line first. Then the client link is ready.');return}openShare()}
+function openShare(){closeShare();const co=V.role==='company';const m=document.createElement('div');m.className='modal';m.id='share';m.setAttribute('role','dialog');m.setAttribute('aria-modal','true');m.setAttribute('aria-labelledby','shh');
+ const msg=shareMsg(),subj='Your roof contract from Lucky Line Roofing';const hasShare=!!navigator.share;
+ m.innerHTML=`<div class="sheet"><h2 id="shh">${co?'Now send this to your client':'Share this contract'}</h2>
+ <p>${co?`You signed for Lucky Line. Send ${esc(clientFirst())} this link so they can review and sign on their phone.`:'Send this link to anyone who needs a copy.'}</p>
+ <textarea class="linkbox" id="lk" rows="3" readonly>${esc(linkToShare())}</textarea>
+ <div class="grid"><a class="btn p" href="sms:&body=${encodeURIComponent(msg)}">Text it</a><a class="btn p" href="mailto:?subject=${encodeURIComponent(subj)}&body=${encodeURIComponent(msg)}">Email it</a>
+ ${hasShare?'<button class="btn" onclick="doShare()">Share…</button>':''}<button class="btn" onclick="doCopy()" ${hasShare?'':'style="grid-column:1/-1"'}>Copy link</button></div>
+ <div class="copied" id="cpm" aria-live="polite"></div><button class="done" onclick="closeShare()">Done</button></div>`;
+ m.addEventListener('click',e=>{if(e.target===m)closeShare()});document.body.appendChild(m);document.body.style.overflow='hidden'}
+function closeShare(){const m=document.getElementById('share');if(m){m.remove();document.body.style.overflow=''}}
+addEventListener('keydown',e=>{if(e.key==='Escape')closeShare()});
+async function doShare(){try{await navigator.share({title:'Your roof contract from Lucky Line Roofing',text:shareMsg().replace(/: https?:\S+$/,':'),url:linkToShare()})}catch(e){}}
+async function doCopy(){const out=document.getElementById('cpm'),lk=document.getElementById('lk');try{await navigator.clipboard.writeText(linkToShare());out.textContent='Link copied. Paste it in a text or email.'}catch(e){lk.focus();lk.select();lk.setSelectionRange(0,99999);try{document.execCommand('copy');out.textContent='Link copied. Paste it in a text or email.'}catch(_){out.textContent='Press and hold the link above to copy it.'}}}
 function alertMsg(m){const E=document.getElementById('err');if(E){E.textContent=m;E.scrollIntoView({block:'center'})}}
 function pdf(){print()}
 (async()=>{try{V=await call('view');render()}catch(e){A.innerHTML=`<div class="titlecard"><h1>We couldn't open this contract</h1><p>${esc(e.message)}</p><div class="row"><a class="btn p" href="tel:4066099950">Call 406-609-9950</a></div></div>`}})();

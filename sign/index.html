@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="robots" content="noindex,nofollow">
+<meta name="referrer" content="no-referrer">
+<title>Roof contract · Lucky Line Roofing</title>
+<link rel="icon" href="img/lucky-line-logo.png">
+<link rel="stylesheet" href="portal.css">
+<style>
+.testbar{background:#FFF4D6;color:#7a5a00;text-align:center;font-weight:bold;font-size:14px;padding:8px 12px}
+.bar{position:sticky;top:0;z-index:5;background:#fff;border-bottom:1px solid var(--rule);display:flex;gap:8px;padding:8px 14px;justify-content:center}
+.bar .btn{min-height:40px;flex:0 1 220px;font-size:14px}
+.lead td{font-size:15px}.lead .nm{font-weight:bold;color:var(--green)}
+.terms{padding-left:24px;margin:0}.terms li{margin:0 0 9px}
+ul.sc{padding-left:20px;margin:0 0 10px}ul.sc li{margin:0 0 5px}
+.sigs{display:grid;grid-template-columns:1fr;gap:10px}@media(min-width:640px){.sigs{grid-template-columns:1fr 1fr}}
+.sigblock{border:1.5px solid var(--rule);border-radius:12px;padding:10px 12px;background:#fff;break-inside:avoid}
+.sigblock .lbl{font-size:12px;font-weight:bold;color:var(--muted);text-transform:uppercase;letter-spacing:.4px}
+.sigblock img{width:100%;max-width:280px;height:80px;object-fit:contain;object-position:left center;display:block;border-bottom:1px solid var(--rule)}
+.sigmeta{font-size:13.5px;margin-top:6px}
+.box p{margin:0 0 6px}.box p:last-child{margin:0}
+textarea.f2{width:100%;font:inherit;padding:11px 12px;border:1.5px solid var(--rule);border-radius:10px;resize:none;color:var(--ink);min-height:48px}
+.foot{color:var(--muted);font-size:12px;margin-top:14px;border-top:1px solid var(--rule);padding-top:8px;display:flex;justify-content:space-between;gap:8px;flex-wrap:wrap}
+.band .who{min-width:0;overflow-wrap:anywhere}@media(max-width:360px){.logo{width:72px;height:72px}}
+.modal{position:fixed;inset:0;z-index:50;background:rgba(10,30,20,.55);display:flex;align-items:flex-end;justify-content:center;padding:12px}
+@media(min-width:640px){.modal{align-items:center}}
+.sheet{background:#fff;border-radius:18px;max-width:460px;width:100%;padding:18px 16px 16px;max-height:90vh;overflow:auto;box-shadow:0 10px 40px rgba(0,0,0,.25)}
+.sheet h2{color:var(--green);margin:0 0 6px}.sheet .linkbox{width:100%;font:13px/1.4 "Liberation Sans",Arial,sans-serif;padding:10px;border:1.5px solid var(--rule);border-radius:10px;background:var(--cover);color:var(--ink);resize:none;margin-top:8px}
+.sheet .grid{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:12px}.sheet .grid .btn{flex:none;width:100%}
+.sheet .done{display:block;width:100%;margin-top:10px;background:none;border:0;color:var(--muted);font:bold 14px "Liberation Sans",Arial,sans-serif;padding:10px;cursor:pointer}
+.copied{color:var(--green);font-weight:bold;text-align:center;min-height:20px;margin-top:8px}
+.warn{background:#FDECEC;border:1.5px solid var(--high);color:var(--high);border-radius:12px;padding:12px;font-weight:bold}
+@media print{.modal{display:none!important}.wrap{padding-bottom:0}.sec:last-child{margin-bottom:0}.testbar{-webkit-print-color-adjust:exact;print-color-adjust:exact}}
+</style>
+</head>
+<body>
+<div id="tb"></div>
+<div class="bar no-print"><button class="btn" onclick="pdf()">Download PDF</button><button class="btn" id="cp" onclick="copyLink()">Copy link to share</button></div>
+<div class="band"><div class="in"><div class="logo"><img src="img/lucky-line-logo.png" alt="Lucky Line Roofing"></div>
+ <div class="who"><b>Lucky Line Roofing LLC</b><br>406-609-9950 · luckylineroofing.com<br>gage.mcdonnell@luckylineroofing.com</div></div></div>
+<div class="wrap" id="app"><div class="titlecard"><h1>Loading your contract…</h1></div></div>
+<script>
+const SB='https://wwqjoagdnclaylllzcut.supabase.co',KEY='sb_publishable_AVIpI00DFiYwugP16-wMWQ_qENLObrc';
+const T=new URLSearchParams(location.search).get('t')||'';
+const esc=s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const money=n=>'$'+(Number(n)||0).toLocaleString('en-US',{minimumFractionDigits:2,maximumFractionDigits:2});
+const ROOF='<svg width="30" height="16" viewBox="0 0 30 16" aria-hidden="true"><path d="M1 9 L15 2 L29 9" fill="none" stroke="#16603A" stroke-width="2"/><line x1="7" y1="14" x2="23" y2="14" stroke="#16603A" stroke-width="2"/></svg>';
+const hdr=s=>`<div class="hdr"><div class="brand">${ROOF}LUCKY LINE ROOFING</div><div class="section">${esc(s)}</div></div>`;
+async function call(action,p){const r=await fetch(SB+'/rest/v1/rpc/crm_contract',{method:'POST',headers:{apikey:KEY,Authorization:'Bearer '+KEY,'Content-Type':'application/json'},body:JSON.stringify({p_token:T,p_action:action,p:p||{}})});const d=await r.json().catch(()=>null);if(!r.ok)throw new Error((d&&d.message)||'Something went wrong. Please call 406-609-9950.');return d}
+const A=document.getElementById('app');let V=null;
+const sigCard=(lbl,s)=>`<div class="sigblock"><div class="lbl">${esc(lbl)}</div><img src="${esc(s.sig)}" alt="Signature of ${esc(s.name)}"><div class="sigmeta"><b>${esc(s.name)}</b>${s.title?', '+esc(s.title):''}<br>Signed ${esc(s.at)}</div></div>`;
+function contractBody(d){
+ return `<div class="titlecard"><h1>${esc(d.title)}</h1><div class="prop">${esc(d.address)}</div>
+ <div class="meta">Client / Property Contact: ${esc(d.client_line)}<br>Prepared: ${esc(d.prepared)}${(d.contacts||[]).map(c=>`<br>${esc(c[0])}: ${esc(c[1])} · ${esc(c[2])}`).join('')}</div>
+ <div class="tag">Shelter you can count on, service you'll remember.</div></div>
+ <div class="sec">${hdr('Project Summary')}<p>${esc(d.summary)}</p><p class="muted">${esc(d.measure_note)}</p></div>
+ <div class="sec">${hdr('Price')}<h2>Our proposal</h2>
+ <table class="lead"><thead><tr><th>Item Description</th><th class="num">Amount</th></tr></thead><tbody><tr><td><span class="nm">${esc(d.lead[0])}</span><br>${esc(d.lead[1])}</td><td class="num">${money(d.lead[2])}</td></tr><tr class="total"><td>TOTAL INVESTMENT</td><td class="num">${money(d.total)}</td></tr></tbody></table>
+ <h3>Price breakdown</h3>
+ <table><thead><tr><th>Item Description</th><th class="num">Amount</th></tr></thead><tbody>${d.lines.map(l=>`<tr><td>${esc(l[0])}</td><td class="num">${money(l[1])}</td></tr>`).join('')}<tr class="total"><td>${esc(d.lines_total_label)}</td><td class="num">${money(d.total)}</td></tr></tbody></table>
+ <div class="cols"><div class="box"><h4>Payment Terms</h4>${d.payment.map(x=>`<p>${esc(x)}</p>`).join('')}</div><div class="box"><h4>Warranty</h4><p>${esc(d.warranty)}</p></div></div></div>
+ <div class="sec">${hdr('Scope of Work')}<ul class="sc">${d.scope.map(x=>`<li>${esc(x)}</li>`).join('')}</ul><div class="box"><h4>Important Exclusions</h4>${esc(d.exclusions)}</div></div>
+ <div class="sec">${hdr('Mandatory Clauses')}${d.clauses.map(c=>`<p><b>${esc(c[0])}:</b> ${esc(c[1])}</p>`).join('')}</div>
+ <div class="sec">${hdr('Addendum A')}<h2>Contract Terms &amp; Conditions</h2><ol class="terms">${d.addendum.map(c=>`<li><b>${esc(c[0])}:</b> ${esc(c[1])}</li>`).join('')}</ol></div>`}
+function render(){const v=V,d=v.data;
+ document.getElementById('tb').innerHTML=v.is_test?`<div class="testbar">TEST COPY · not a real contract · ${esc(v.label||'')}</div>`:'';
+ document.getElementById('cp').textContent=v.role==='company'?'Send to client':'Share';
+ const foot=`<div class="foot"><span><i>Shelter you can count on, service you'll remember.</i></span><span>${esc(d.footer||'')}</span></div>`;
+ let acc='';
+ if(v.client&&v.company){
+  acc=`<div class="sec ok">${hdr('Acceptance')}<h2>Signed. Thank you${v.role==='client'?', '+esc(String(v.client.name).split(' ')[0]):''}!</h2>
+  <p>Both parties have signed. This is the full agreement for ${esc(d.accept_label.toLowerCase())} at ${esc(d.address)} for <b>${money(d.total)}</b>.</p>
+  <div class="sigs">${sigCard('For Lucky Line Roofing LLC',v.company)}${sigCard('Client',v.client)}</div>
+  <p class="muted" style="margin-top:10px">${esc(d.after_note)}</p>${foot}</div>`;
+ }else if(v.role==='company'&&!v.company){
+  acc=`<div class="sec no-print" id="acc">${hdr('Lucky Line signature')}<h2>Sign for Lucky Line</h2>
+  <p>This is exactly what the client will see. Lucky Line signs first; the client link only works after you sign.</p>
+  <label class="f" for="nm">Your name</label><input type="text" id="nm" autocomplete="name" value="${esc(d.company_default[0])}">
+  <label class="f" for="ti">Title</label><input type="text" id="ti" value="${esc(d.company_default[1])}">
+  ${pad()}<div class="err" id="err" role="alert"></div><div class="row"><button class="btn p" id="go" onclick="sign()">Sign for Lucky Line</button></div></div>`;
+ }else if(v.role==='company'){
+  acc=`<div class="sec">${hdr('Acceptance')}<h2>Signed for Lucky Line</h2><div class="sigs">${sigCard('For Lucky Line Roofing LLC',v.company)}</div>
+  ${v.changed_since_signing?'<p class="warn">The contract changed after you signed. The client cannot sign this version.</p>':''}
+  <p style="margin-top:12px">Waiting for the client to sign. Send them the client link:</p>
+  <div class="row no-print"><button class="btn p" onclick="openShare()">Send to client</button></div>${foot}</div>`;
+ }else{
+  acc=`<div class="sec" id="acc">${hdr('Acceptance')}<h2>Accept and sign</h2><div class="sigs">${sigCard('For Lucky Line Roofing LLC',v.company)}</div>
+  <p style="margin-top:12px">You're accepting <b>${esc(d.accept_label)}</b> for <b>${money(d.total)}</b>.</p>
+  <label class="f" for="nm">Your full name</label><input type="text" id="nm" autocomplete="name" value="${esc(d.client_default[0])}">
+  <label class="f" for="ti">Signing as</label><textarea class="f2" id="ti" rows="2">${esc(d.client_default[1])}</textarea>
+  <label class="f" for="em">Email (for your copy)</label><input type="email" id="em" autocomplete="email">
+  ${pad()}<label class="agree"><input type="checkbox" id="ag"><span>${esc(d.agree)}</span></label>
+  <div class="err" id="err" role="alert"></div><div class="row"><button class="btn p" id="go" onclick="sign()">Sign &amp; accept</button></div>${foot}</div>`;
+ }
+ A.innerHTML=contractBody(d)+acc;
+ if(document.getElementById('pad'))setupPad()}
+const pad=()=>`<label class="f">Sign with your finger</label><div class="padwrap"><canvas class="pad" id="pad" aria-label="Signature box"></canvas><div class="padline"></div></div>
+ <div class="row" style="margin-top:6px"><button class="btn" style="flex:0 1 auto;min-height:38px" onclick="clearPad()">Clear signature</button></div>`;
+let cv,ctx,inked=false;
+function setupPad(){cv=document.getElementById('pad');const r=cv.getBoundingClientRect(),k=window.devicePixelRatio||1;cv.width=r.width*k;cv.height=r.height*k;ctx=cv.getContext('2d');ctx.scale(k,k);ctx.lineWidth=2.4;ctx.lineCap='round';ctx.lineJoin='round';ctx.strokeStyle='#14231a';inked=false;let down=false,last=null;
+ const pt=e=>{const b=cv.getBoundingClientRect();return [e.clientX-b.left,e.clientY-b.top]};
+ cv.onpointerdown=e=>{down=true;last=pt(e);cv.setPointerCapture(e.pointerId);e.preventDefault()};
+ cv.onpointermove=e=>{if(!down)return;const p=pt(e);ctx.beginPath();ctx.moveTo(last[0],last[1]);ctx.lineTo(p[0],p[1]);ctx.stroke();last=p;inked=true;e.preventDefault()};
+ cv.onpointerup=cv.onpointercancel=()=>{down=false}}
+function clearPad(){if(ctx){ctx.clearRect(0,0,cv.width,cv.height);inked=false}}
+function sigPng(){const k=Math.min(1,600/cv.width),c=document.createElement('canvas');c.width=Math.round(cv.width*k);c.height=Math.round(cv.height*k);const x=c.getContext('2d');x.fillStyle='#fff';x.fillRect(0,0,c.width,c.height);x.drawImage(cv,0,0,c.width,c.height);return c.toDataURL('image/png')}
+async function sign(){const E=document.getElementById('err');E.textContent='';const g=id=>document.getElementById(id);const nm=g('nm').value.trim();
+ if(nm.length<2){E.textContent='Please type your full name.';return}if(!inked){E.textContent='Please sign in the box.';return}
+ if(g('ag')&&!g('ag').checked){E.textContent='Please check the box to accept.';return}
+ const b=g('go');b.disabled=true;b.textContent='Saving…';
+ try{await call('sign',{name:nm,title:g('ti').value.trim(),email:g('em')?g('em').value.trim():'',agree:g('ag')?g('ag').checked:false,signature:sigPng(),ua:navigator.userAgent});const wasCo=V.role==='company';V=await call('view');render();scrollTo({top:document.body.scrollHeight,behavior:'smooth'});if(wasCo)openShare()}
+ catch(e){E.textContent=e.message;b.disabled=false;b.textContent='Try again'}}
+function linkToShare(){const u=new URL(location.href);if(V&&V.role==='company'&&V.client_link_token)u.searchParams.set('t',V.client_link_token);return u.href}
+function clientFirst(){const n=(V&&V.data&&V.data.client_default&&V.data.client_default[0])||'';return n.split(' ')[0]||'there'}
+function shareMsg(){return `Hi ${clientFirst()}, here's your roof contract from Lucky Line Roofing for ${V.data.address}. You can review it and sign right on your phone: ${linkToShare()}`}
+function copyLink(){if(V&&V.role==='company'&&!V.client_link_token){alertMsg('Sign for Lucky Line first. Then the client link is ready.');return}openShare()}
+function openShare(){closeShare();const co=V.role==='company';const m=document.createElement('div');m.className='modal';m.id='share';m.setAttribute('role','dialog');m.setAttribute('aria-modal','true');m.setAttribute('aria-labelledby','shh');
+ const msg=shareMsg(),subj='Your roof contract from Lucky Line Roofing';const hasShare=!!navigator.share;
+ m.innerHTML=`<div class="sheet"><h2 id="shh">${co?'Now send this to your client':'Share this contract'}</h2>
+ <p>${co?`You signed for Lucky Line. Send ${esc(clientFirst())} this link so they can review and sign on their phone.`:'Send this link to anyone who needs a copy.'}</p>
+ <textarea class="linkbox" id="lk" rows="3" readonly>${esc(linkToShare())}</textarea>
+ <div class="grid"><a class="btn p" href="sms:&body=${encodeURIComponent(msg)}">Text it</a><a class="btn p" href="mailto:?subject=${encodeURIComponent(subj)}&body=${encodeURIComponent(msg)}">Email it</a>
+ ${hasShare?'<button class="btn" onclick="doShare()">Share…</button>':''}<button class="btn" onclick="doCopy()" ${hasShare?'':'style="grid-column:1/-1"'}>Copy link</button></div>
+ <div class="copied" id="cpm" aria-live="polite"></div><button class="done" onclick="closeShare()">Done</button></div>`;
+ m.addEventListener('click',e=>{if(e.target===m)closeShare()});document.body.appendChild(m);document.body.style.overflow='hidden'}
+function closeShare(){const m=document.getElementById('share');if(m){m.remove();document.body.style.overflow=''}}
+addEventListener('keydown',e=>{if(e.key==='Escape')closeShare()});
+async function doShare(){try{await navigator.share({title:'Your roof contract from Lucky Line Roofing',text:shareMsg().replace(/: https?:\S+$/,':'),url:linkToShare()})}catch(e){}}
+async function doCopy(){const out=document.getElementById('cpm'),lk=document.getElementById('lk');try{await navigator.clipboard.writeText(linkToShare());out.textContent='Link copied. Paste it in a text or email.'}catch(e){lk.focus();lk.select();lk.setSelectionRange(0,99999);try{document.execCommand('copy');out.textContent='Link copied. Paste it in a text or email.'}catch(_){out.textContent='Press and hold the link above to copy it.'}}}
+function alertMsg(m){const E=document.getElementById('err');if(E){E.textContent=m;E.scrollIntoView({block:'center'})}}
+function pdf(){print()}
+(async()=>{try{V=await call('view');render()}catch(e){A.innerHTML=`<div class="titlecard"><h1>We couldn't open this contract</h1><p>${esc(e.message)}</p><div class="row"><a class="btn p" href="tel:4066099950">Call 406-609-9950</a></div></div>`}})();
+let rw=innerWidth;addEventListener('resize',()=>{if(innerWidth!==rw){rw=innerWidth;if(cv&&!inked)setupPad()}});
+</script>
+</body>
+</html>
