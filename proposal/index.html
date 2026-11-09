@@ -72,7 +72,7 @@ async function sign(){const E=document.getElementById('err');E.textContent='';co
  if(!pick){E.textContent='Pick an option above first.';return}if(nm.length<2){E.textContent='Please type your full name.';return}if(!inked){E.textContent='Please sign in the box.';return}if(!document.getElementById('ag').checked){E.textContent='Please check the box to accept.';return}
  const b=document.getElementById('go');b.disabled=true;b.textContent='Signing…';
  try{await call('sign',{estimate_id:pick,name:nm,email:document.getElementById('em').value.trim(),signature:sigPng(),ua:navigator.userAgent});D=await call('view');render();scrollTo({top:0,behavior:'smooth'})}catch(e){E.textContent=e.message;b.disabled=false;b.textContent='Sign & accept'}}
-(async()=>{try{D=await call('view');render()}catch(e){A.innerHTML=`<div class="titlecard"><h1>We couldn't open this proposal</h1><p>${esc(e.message)}</p><div class="row"><a class="btn p" href="tel:4066099950">Call 406-609-9950</a></div></div>`}})();
+(async()=>{try{D=await call('view');if(D.report_url&&/^https:\/\/useroofly\.com\/p\//.test(D.report_url)&&!/[?&]classic=1/.test(location.search)){location.replace(D.report_url+(D.report_url.indexOf('?')>-1?'&':'?')+'ct='+T);return}render()}catch(e){A.innerHTML=`<div class="titlecard"><h1>We couldn't open this proposal</h1><p>${esc(e.message)}</p><div class="row"><a class="btn p" href="tel:4066099950">Call 406-609-9950</a></div></div>`}})();
 addEventListener('resize',()=>{if(pad&&!inked)setupPad()});
 </script>
 </body>
