@@ -1,0 +1,64 @@
+/* Lucky Line Roofing customer pages (proposal + invoice). House style from the VFW / American Legion packages. */
+:root{--green:#16603A;--tint:#EAF2EC;--cover:#F3F5F2;--ink:#2A2E2C;--muted:#5F6763;--rule:#D9DEDB;--critical:#8E1B1B;--high:#C0392B;--medium:#B7791F}
+*{box-sizing:border-box}
+html,body{margin:0;background:var(--cover);color:var(--ink);font:15px/1.5 "Liberation Sans",Arial,Helvetica,sans-serif;-webkit-text-size-adjust:100%}
+.wrap{max-width:760px;margin:0 auto;padding:0 14px 40px}
+.band{background:var(--green);color:#fff;padding:18px 14px 64px}
+.band .in{max-width:760px;margin:0 auto;display:flex;gap:14px;align-items:center}
+.logo{width:92px;height:92px;flex:none;background:#fff;border-radius:12px;padding:6px}
+.logo img{width:100%;height:100%;object-fit:contain;display:block}
+.band .who{font-size:13px;line-height:1.55}
+.band .who b{font-size:15px}
+.titlecard{background:#fff;border-radius:16px;padding:20px 20px 16px;margin:-48px 0 14px;box-shadow:0 6px 24px rgba(22,96,58,.08)}
+.titlecard h1{color:var(--green);font-size:26px;line-height:1.15;margin:0 0 8px}
+.titlecard .prop{font-weight:bold;font-size:17px;margin:0 0 8px}
+.titlecard .meta{color:var(--muted);font-size:13.5px;line-height:1.7}
+.tag{color:var(--green);font-style:italic;font-size:13.5px;margin-top:10px}
+.sec{background:#fff;border-radius:16px;padding:18px 18px 14px;margin-top:12px}
+.hdr{display:flex;justify-content:space-between;align-items:center;border-bottom:1.5px solid var(--green);padding-bottom:7px;margin-bottom:14px;gap:10px}
+.hdr .brand{display:flex;align-items:center;gap:8px;color:var(--green);font-weight:bold;font-size:13px;letter-spacing:.2px}
+.hdr .section{color:var(--muted);font-size:12.5px}
+h2{font-size:22px;margin:0 0 8px}
+h3{color:var(--green);font-size:17px;margin:14px 0 6px}
+p{margin:0 0 10px}
+.letter{white-space:pre-wrap}
+.find{padding:8px 0;border-top:1px solid var(--rule)}.find:first-child{border-top:0}
+.lvl{font-weight:bold;font-size:12.5px;text-transform:capitalize}.lvl.high{color:var(--high)}.lvl.medium{color:var(--medium)}.lvl.low,.lvl.easy{color:var(--green)}.lvl.critical{color:var(--critical)}
+table{width:100%;border-collapse:collapse;font-size:13.5px;margin:8px 0 0}
+th{background:var(--green);color:#fff;text-align:left;padding:7px 9px;font-weight:bold}
+td{padding:7px 9px;border-bottom:1px solid var(--rule);vertical-align:top}
+tr:nth-child(even) td{background:#F7FAF8}
+.num{text-align:right;white-space:nowrap}
+tr.total td{background:var(--green);color:#fff;font-weight:bold;font-size:15px}
+.opt{border:2px solid var(--rule);border-radius:14px;padding:14px;margin-top:12px;cursor:pointer;display:block}
+.opt.on{border-color:var(--green);box-shadow:0 0 0 3px rgba(22,96,58,.15)}
+.opt .top{display:flex;gap:10px;align-items:flex-start}
+.opt input{width:22px;height:22px;accent-color:var(--green);flex:none;margin:2px 0 0}
+.opt .nm{font-weight:bold;font-size:17px;color:var(--green)}
+.opt .tier{display:inline-block;font-size:11.5px;font-weight:bold;color:var(--green);background:var(--tint);border-radius:20px;padding:2px 9px;margin-left:4px}
+.cols{display:grid;grid-template-columns:1fr;gap:10px;margin-top:12px}
+@media (min-width:640px){.cols{grid-template-columns:1fr 1fr}}
+.box{background:var(--tint);border-radius:12px;padding:12px 14px;font-size:13.5px}
+.box h4{color:var(--green);margin:0 0 6px;font-size:14px}
+label.f{display:block;font-weight:bold;font-size:13px;margin:12px 0 5px}
+input[type=text],input[type=email]{width:100%;font:inherit;padding:11px 12px;border:1.5px solid var(--rule);border-radius:10px;background:#fff;color:var(--ink)}
+input:focus{outline:none;border-color:var(--green)}
+.padwrap{position:relative;margin-top:4px}
+canvas.pad{width:100%;height:170px;border:1.5px dashed var(--green);border-radius:12px;background:#fff;touch-action:none;display:block}
+.padline{position:absolute;left:18px;right:18px;bottom:36px;border-top:1px solid var(--rule);pointer-events:none}
+.row{display:flex;gap:8px;flex-wrap:wrap;align-items:center;margin-top:10px}
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:6px;min-height:46px;padding:0 18px;border-radius:12px;border:1.5px solid var(--green);background:#fff;color:var(--green);font:bold 15px "Liberation Sans",Arial,sans-serif;cursor:pointer;text-decoration:none;flex:1 1 160px;text-align:center}
+.btn.p{background:var(--green);color:#fff}
+.btn[disabled]{opacity:.5}
+.agree{display:flex;gap:10px;align-items:flex-start;margin-top:12px;font-size:13.5px}
+.agree input{width:22px;height:22px;accent-color:var(--green);flex:none;margin:0}
+.err{color:var(--high);font-weight:bold;margin-top:8px;min-height:1px}
+.ok{background:var(--tint);border:2px solid var(--green);border-radius:14px;padding:16px}
+.ok h2{color:var(--green)}
+.people{display:grid;grid-template-columns:1fr;gap:8px;font-size:13.5px}
+@media (min-width:640px){.people{grid-template-columns:1fr 1fr}}
+.people a{color:var(--green)}
+.ftr{border-top:1px solid var(--rule);margin-top:18px;padding-top:8px;color:var(--muted);font-size:12px;display:flex;justify-content:space-between;gap:8px;flex-wrap:wrap}
+.big{font-size:30px;font-weight:bold;color:var(--green)}
+.muted{color:var(--muted)}
+@media print{html,body{background:#fff}.no-print{display:none!important}.sec,.titlecard{box-shadow:none;break-inside:avoid}}
