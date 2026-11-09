@@ -24,6 +24,8 @@ async function call(action,p){const r=await fetch(SB+'/rest/v1/rpc/crm_portal',{
 const A=document.getElementById('app');let D=null,pick=null;
 const PEOPLE=`<div class="sec">${hdr('Questions?')}<div class="people"><div><b>Justin Walton</b><br><a href="tel:4153005496">415-300-5496</a><br><a href="mailto:jw@luckylineroofing.com">jw@luckylineroofing.com</a></div><div><b>Gage McDonnell</b><br><a href="tel:4066099950">406-609-9950</a><br><a href="mailto:gage.mcdonnell@luckylineroofing.com">gage.mcdonnell@luckylineroofing.com</a></div></div>
  <div class="ftr"><span><i>Shelter you can count on, service you'll remember.</i></span><span>406-609-9950 · luckylineroofing.com · Format v2</span></div></div>`;
+const m2=n=>'$'+(Number(n)||0).toLocaleString('en-US',{minimumFractionDigits:2,maximumFractionDigits:2});
+function fillAdd(t,d,o){const M=d.measure||{},tot=o?+o.total:0;return String(t).replace(/\{address\}/g,d.job.address||'the project address').replace(/\{area\}/g,M.areaFt2?(+M.areaFt2).toLocaleString('en-US')+' sq ft':'the measured area').replace(/\{squares\}/g,M.squares?M.squares+' squares':'the measured squares').replace(/\{deposit\}/g,m2(tot/2)).replace(/\{balance\}/g,m2(tot/2))}
 function render(){const d=D,first=d.first||'there';const opts=d.options||[];if(!pick&&d.signed)pick=d.signed.estimate_id;if(!pick&&opts.length===1)pick=opts[0].id;
  const chosen=opts.find(o=>o.id===pick);
  const M=d.measure||null,L=(M&&M.lengths)||{};const ft=n=>(Number(n)||0).toLocaleString('en-US')+' ft';
@@ -41,7 +43,7 @@ function render(){const d=D,first=d.first||'there';const opts=d.options||[];if(!
    <table><thead><tr><th>Scope</th><th class="num">Qty</th><th class="num">Amount</th></tr></thead><tbody>${(o.lines||[]).map(l=>`<tr><td>${esc(l.item)}</td><td class="num">${esc(+l.qty)} ${esc(l.unit||'')}</td><td class="num">${money(l.amount)}</td></tr>`).join('')}<tr class="total"><td colspan="2">TOTAL INVESTMENT</td><td class="num">${money(o.total)}</td></tr></tbody></table></label>`).join('')||'<p>Your options are being finalized. Please call 406-609-9950.</p>'}
   <div class="cols"><div class="box"><h4>Warranty, Payment &amp; Schedule</h4>${esc(d.terms||'50% deposit to get on the schedule, balance at substantial completion.')}${chosen?`<br><b>Deposit due on acceptance: ${money(chosen.total/2)}</b><br><b>Balance at substantial completion: ${money(chosen.total/2)}</b>`:''}</div><div class="box"><h4>Notes &amp; Exclusions</h4>Anything outside the scope above, including hidden damage found during tear-off (like rotted decking), is only done with your written OK on a change order. Proposal good for 30 days.</div></div>
   ${d.financing_link?`<div class="row no-print"><a class="btn" href="${esc(d.financing_link)}" target="_blank" rel="noopener">See monthly payment options</a></div>`:''}</div>
- ${d.addendum?`<div class="sec">${hdr('Addendum A: Contract terms & conditions')}<div class="addn">${esc(d.addendum)}</div></div>`:''}
+ ${d.addendum?`<div class="sec">${hdr('Terms & conditions')}<div class="addn">${esc(fillAdd(d.addendum,d,chosen||opts[0]))}</div></div>`:''}
  ${!d.signed&&opts.length?`<div class="sec no-print" id="acc">${hdr('Acceptance')}<h2>Accept and sign</h2>
   <p>${chosen?`You're accepting <b>${esc(chosen.name)}</b> for <b>${money(chosen.total)}</b>.`:'<b>Pick an option above first.</b>'}</p>
   <label class="f" for="nm">Your full name</label><input type="text" id="nm" autocomplete="name" value="${esc(d.customer||'')}">
