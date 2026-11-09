@@ -7,7 +7,7 @@
 <meta name="referrer" content="no-referrer">
 <title>Your roof proposal · Lucky Line Roofing</title>
 <link rel="icon" href="img/lucky-line-logo.png">
-<link rel="stylesheet" href="portal.css">
+<link rel="stylesheet" href="portal.css?v=3">
 </head>
 <body>
 <div class="band"><div class="in"><div class="logo"><img src="img/lucky-line-logo.png" alt="Lucky Line Roofing"></div>
@@ -24,13 +24,19 @@ async function call(action,p){const r=await fetch(SB+'/rest/v1/rpc/crm_portal',{
 const A=document.getElementById('app');let D=null,pick=null;
 const PEOPLE=`<div class="sec">${hdr('Questions?')}<div class="people"><div><b>Justin Walton</b><br><a href="tel:4153005496">415-300-5496</a><br><a href="mailto:jw@luckylineroofing.com">jw@luckylineroofing.com</a></div><div><b>Gage McDonnell</b><br><a href="tel:4066099950">406-609-9950</a><br><a href="mailto:gage.mcdonnell@luckylineroofing.com">gage.mcdonnell@luckylineroofing.com</a></div></div>
  <div class="ftr"><span><i>Shelter you can count on, service you'll remember.</i></span><span>406-609-9950 · luckylineroofing.com · Format v2</span></div></div>`;
+const COL={eave:"#2EA84A",rake:"#E67E22",ridge:"#D64541",hip:"#8E44AD",valley:"#2B6FD8",edge:"#16A2B8",parapet:"#FFFFFF",flashing:"#F1C40F"};
+function aerialSvg(M){const lines=M.lines||[];if(!lines.length)return `<img class="aerialimg" src="${esc(M.img)}" alt="Overhead view of the roof">`;const xs=lines.flatMap(l=>[l.x1,l.x2]),ys=lines.flatMap(l=>[l.y1,l.y2]),pad=70;
+ const x0=Math.max(0,Math.min(...xs)-pad),y0=Math.max(0,Math.min(...ys)-pad),x1=Math.min(1280,Math.max(...xs)+pad),y1=Math.min(1280,Math.max(...ys)+pad),W=x1-x0,k=W/1000;
+ return `<svg class="aerialsvg" viewBox="${x0} ${y0} ${W} ${y1-y0}" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Overhead view of the roof with every edge measured"><image href="${esc(M.img)}" x="0" y="0" width="1280" height="1280"/>
+ ${[0,1].map(pass=>lines.map(l=>`<line x1="${l.x1}" y1="${l.y1}" x2="${l.x2}" y2="${l.y2}" stroke="${pass?COL[l.type]||'#fff':'#000'}" stroke-width="${(pass?7:12)*k}" stroke-linecap="round"/>`).join('')).join('')}
+ ${lines.filter(l=>l.len>=6).map(l=>{const cx=(l.x1+l.x2)/2,cy=(l.y1+l.y2)/2,t=l.len+"'",w=(t.length*17+14)*k;return `<rect x="${cx-w/2}" y="${cy-19*k}" width="${w}" height="${38*k}" rx="${7*k}" fill="#fff"/><text x="${cx}" y="${cy+10*k}" font-size="${29*k}" font-weight="bold" text-anchor="middle" fill="#0B2545" font-family="Arial,sans-serif">${t}</text>`}).join('')}</svg>`}
 const m2=n=>'$'+(Number(n)||0).toLocaleString('en-US',{minimumFractionDigits:2,maximumFractionDigits:2});
 function fillAdd(t,d,o){const M=d.measure||{},tot=o?+o.total:0;return String(t).replace(/\{address\}/g,d.job.address||'the project address').replace(/\{area\}/g,M.areaFt2?(+M.areaFt2).toLocaleString('en-US')+' sq ft':'the measured area').replace(/\{squares\}/g,M.squares?M.squares+' squares':'the measured squares').replace(/\{deposit\}/g,m2(tot/2)).replace(/\{balance\}/g,m2(tot/2))}
 function render(){const d=D,first=d.first||'there';const opts=d.options||[];if(!pick&&d.signed)pick=d.signed.estimate_id;if(!pick&&opts.length===1)pick=opts[0].id;
  const chosen=opts.find(o=>o.id===pick);
  const M=d.measure||null,L=(M&&M.lengths)||{};const ft=n=>(Number(n)||0).toLocaleString('en-US')+' ft';
  const MEAS=M&&M.img?`<div class="sec">${hdr('Roof measurements')}<div class="tiles"><div><b>${esc((+M.areaFt2||0).toLocaleString('en-US'))}</b><span>Roof area (sq ft)</span></div><div><b>${esc(M.squares||'')}</b><span>Squares (waste incl.)</span></div><div><b>${esc(M.pitch||'')}</b><span>Pitch</span></div></div><table><thead><tr><th>Edge</th><th class="num">Length</th></tr></thead><tbody>${[['eave','Eaves'],['rake','Rakes'],['ridge','Ridge'],['hip','Hips'],['valley','Valleys']].filter(k=>+L[k[0]]).map(k=>`<tr><td>${k[1]}</td><td class="num">${ft(L[k[0]])}</td></tr>`).join('')}</tbody></table><p class="muted" style="font-size:13px">Measured from aerial imagery${M.imagery?' ('+esc(M.imagery)+')':''}. Waste is included in the price.</p></div>`:'';
- A.innerHTML=`<div class="titlecard">${M&&M.img?`<img class="cover" src="${esc(M.img)}" alt="Overhead view of the roof">`:''}<h1>Roof Proposal</h1><div class="prop">${esc(d.job.title)}${d.job.address?'<br><span style="font-weight:normal">'+esc(d.job.address)+'</span>':''}</div>
+ A.innerHTML=`<div class="titlecard">${M&&M.img?`<div class="cover">${aerialSvg(M)}</div>`:''}<h1>Roof Proposal</h1><div class="prop">${esc(d.job.title)}${d.job.address?'<br><span style="font-weight:normal">'+esc(d.job.address)+'</span>':''}</div>
   <div class="meta">Prepared for: ${esc(d.customer)}<br>Prepared by: Justin Walton, Lucky Line Roofing LLC<br>Good through: ${esc(d.valid_until)}</div><div class="tag">Shelter you can count on, service you'll remember.</div></div>
  ${d.signed?`<div class="sec ok"><h2>Signed. Thank you, ${esc(first)}!</h2><p>${esc(d.signed.name)} accepted <b>${esc((opts.find(o=>o.id===d.signed.estimate_id)||{}).name||'the proposal')}</b> (${money(d.signed.total)}) on ${esc(d.signed.at)}.</p><p>We'll call you shortly to set up the deposit and pick an install date. Keep this page for your records.</p><div class="row no-print"><button class="btn" onclick="print()">Print or save as PDF</button></div></div>`:''}
  <div class="sec">${hdr('A note from us')}${d.job.letter?`<div class="letter">${esc(d.job.letter.replace(/\n*Justin Walton[\s\S]*$/,'').trim())}</div>`:`<p>Hi ${esc(first)},</p><p>Thank you for having us out. We're local to Livingston, and our advice is always free, whether or not you hire us. Below is what we found and your options, explained plainly.</p>`}
